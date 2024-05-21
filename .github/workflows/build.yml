@@ -27,6 +27,6 @@ jobs:
         database: "${{ secrets.BUGSPLAT_DATABASE }}"
         application: "MyConsoleCrasher"
         version: "1.0.0"
-        files: "**/*.{pdb,exe,dll}"
-        directory: "..\\..\\BugSplat\\Win32\\release"
+        files: "*.{pdb,exe,dll}"
+        directory: "BugSplat\\Win32\\release"
         node-version: "20"
