@@ -48,7 +48,7 @@ jobs:
       run: msbuild .\Samples\myConsoleCrasher\myConsoleCrasher.vcxproj /p:configuration=release /p:DefineConstants=BUGSPLAT_DATABASE=%BUGSPLAT_DATABASE%
 
     - name: Symbols 📦
-      uses: BugSplat-Git/symbol-upload@pwsh
+      uses: BugSplat-Git/symbol-upload@main
       with:
         clientId: "${{ secrets.SYMBOL_UPLOAD_CLIENT_ID }}"
         clientSecret: "${{ secrets.SYMBOL_UPLOAD_CLIENT_SECRET }}"
