@@ -13,4 +13,52 @@
 
 ## github-action-example
 
-Example GitHub action that demonstrates building a Windows C++ application with Visual Studio and uploading symbols to BugSplat.
+This repo contains an example GitHub Action that builds a Windows C++ application and uses [symbol-upload](https://github.com/BugSplat-Git/symbol-upload) to publish symbols to BugSplat. You can either use this template repo, or follow the steps below to configure an existing application.
+
+### Steps
+
+1. Create a new [BugSplat](https://www.bugsplat.com) database
+2. Generate an OAuth2 Client ID and Client Secret pair on the [Integrations](https://app.bugsplat.com/v2/database/integrations#oauth) page
+3. Create an environment secret in your GitHub repo with the key `BUGSPLAT_DATABASE` and your BugSplat database name as the value
+4. Create environment secrets for `SYMBOL_UPLOAD_CLIENT_ID` and `SYMBOL_UPLOAD_CLIENT_SECRET`
+5. Configure BugSplat according to the [docs for your specific platform](https://docs.bugsplat.com/introduction/getting-started/integrations).
+6. If you're using preprocessor definitions to supply a value for `BUGSPLAT_DATABASE`, be sure to configure your project file as seen [here](https://github.com/BugSplat-Git/github-action-example/blob/cd3d15eda4ed715bbe931490d32e074628dcd036/Samples/myConsoleCrasher/myConsoleCrasher.vcxproj#L169-L170).
+7. Create a GitHub Action that builds your project an uploads symbols. Here's a copy of the action used by this repo
+
+```yml
+name: Build myConsoleCrasher Project
+
+on: [push]
+
+jobs:
+  build:
+    name: Build myConsoleCrasher
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup MSBuild path
+      uses: microsoft/setup-msbuild@v1.1
+
+    - name: Build myConsoleCrasher project
+      env:
+        BUGSPLAT_DATABASE: ${{ secrets.BUGSPLAT_DATABASE }}
+      run: msbuild .\Samples\myConsoleCrasher\myConsoleCrasher.vcxproj /p:configuration=release /p:DefineConstants=BUGSPLAT_DATABASE=%BUGSPLAT_DATABASE%
+
+    - name: Symbols 📦
+      uses: BugSplat-Git/symbol-upload@pwsh
+      with:
+        clientId: "${{ secrets.SYMBOL_UPLOAD_CLIENT_ID }}"
+        clientSecret: "${{ secrets.SYMBOL_UPLOAD_CLIENT_SECRET }}"
+        database: "${{ secrets.BUGSPLAT_DATABASE }}"
+        application: "MyConsoleCrasher"
+        version: "1.0.0"
+        files: "*.{pdb,exe,dll}"
+        directory: "BugSplat\\Win32\\release"
+        node-version: "20"
+```
+
+8. Trigger a build and navigate to BugSplat's [Versions](https://app.bugsplat.com/v2/versions) page to verify symbols were uploaded.
+9. Run your application and generate a crash report to test your BugSplat integration.
