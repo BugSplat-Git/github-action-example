@@ -18,3 +18,15 @@ jobs:
       env:
         BUGSPLAT_DATABASE: ${{ secrets.BUGSPLAT_DATABASE }}
       run: msbuild .\Samples\myConsoleCrasher\myConsoleCrasher.vcxproj /p:configuration=release /p:DefineConstants=BUGSPLAT_DATABASE=%BUGSPLAT_DATABASE%
+
+    - name: Symbols 📦
+      uses: BugSplat-Git/symbol-upload@pwsh
+      with:
+        clientId: "${{ secrets.SYMBOL_UPLOAD_CLIENT_ID }}"
+        clientSecret: "${{ secrets.SYMBOL_UPLOAD_CLIENT_SECRET }}"
+        database: "${{ secrets.BUGSPLAT_DATABASE }}"
+        application: "MyConsoleCrasher"
+        version: "1.0.0"
+        files: "**/*.{pdb,exe,dll}"
+        directory: "..\\..\\BugSplat\\Win32\\release"
+        node-version: "20"
