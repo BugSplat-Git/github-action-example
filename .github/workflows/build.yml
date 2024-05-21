@@ -15,4 +15,6 @@ jobs:
       uses: microsoft/setup-msbuild@v1.1
 
     - name: Build myConsoleCrasher project
-      run: msbuild .\Samples\myConsoleCrasher\myConsoleCrasher.vcxproj /p:configuration=release
+      env:
+        BUGSPLAT_DATABASE: ${{ secrets.BUGSPLAT_DATABASE }}
+      run: msbuild .\Samples\myConsoleCrasher\myConsoleCrasher.vcxproj /p:configuration=release /p:DefineConstants=BUGSPLAT_DATABASE=%BUGSPLAT_DATABASE%
