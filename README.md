@@ -11,16 +11,16 @@
     </a>
 </div>
 
-## github-action-example
+# github-action-example
 
 This repo contains an example GitHub Action that builds a Windows C++ application and uses [symbol-upload](https://github.com/BugSplat-Git/symbol-upload) to publish symbols to BugSplat. You can either use this template repo, or follow the steps below to configure an existing application.
 
-### Steps
+## Steps 🥾
 
 1. Create a new [BugSplat](https://www.bugsplat.com) database
 2. Generate an OAuth2 Client ID and Client Secret pair on the [Integrations](https://app.bugsplat.com/v2/database/integrations#oauth) page
-3. Create an environment secret in your GitHub repo with the key `BUGSPLAT_DATABASE` and your BugSplat database name as the value
-4. Create environment secrets for `SYMBOL_UPLOAD_CLIENT_ID` and `SYMBOL_UPLOAD_CLIENT_SECRET`
+3. Create a [repository secret](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository) in your GitHub repo with the key `BUGSPLAT_DATABASE` and your BugSplat database name as the value
+4. Create repository secrets for `SYMBOL_UPLOAD_CLIENT_ID` and `SYMBOL_UPLOAD_CLIENT_SECRET`
 5. Configure BugSplat according to the [docs for your specific platform](https://docs.bugsplat.com/introduction/getting-started/integrations).
 6. If you're using preprocessor definitions to supply a value for `BUGSPLAT_DATABASE`, be sure to configure your project file as seen [here](https://github.com/BugSplat-Git/github-action-example/blob/cd3d15eda4ed715bbe931490d32e074628dcd036/Samples/myConsoleCrasher/myConsoleCrasher.vcxproj#L169-L170).
 7. Create a GitHub Action that builds your project an uploads symbols. Here's a copy of the action used by this repo
@@ -62,3 +62,10 @@ jobs:
 
 8. Trigger a build and navigate to BugSplat's [Versions](https://app.bugsplat.com/v2/versions) page to verify symbols were uploaded.
 9. Run your application and generate a crash report to test your BugSplat integration.
+
+<img width="1725" alt="image" src="https://github.com/BugSplat-Git/github-action-example/assets/2646053/92c052d0-574a-4556-8cf7-1bc1b228a2f3">
+
+## 👷 Support
+
+If you have any additional questions, please email our [support](mailto:support@bugsplat.com) team, join us on [Discord](https://discord.gg/bugsplat), or reach out via the chat in our web application.
+
